@@ -5,14 +5,18 @@ import { fetchCountries } from './js/fetchCountries.js';
 
 const DEBOUNCE_DELAY = 300;
 
-const inputEl = document.querySelector('#search-box');
-const listEl = document.querySelector('.country-list');
-const infoEl = document.querySelector('.country-info');
+const inputElement = document.querySelector('#search-box');
+const listElement = document.querySelector('.country-list');
+const infoElement = document.querySelector('.country-info');
 
 function createMarkupForList(arr) {
   return arr
     .map(listElem => {
-      return `<li class="list-item"><img width="25" src="${listElem.flags.png}" alt="${listElem.flags.alt}" /> <span>${listElem.name.common}</span></li>`;
+      return `<li class="list-item"><img width="25" 
+      src="${listElem.flags.png}" 
+      alt="${listElem.flags.alt}" /> 
+      <span>${listElem.name.common}</span>
+      </li>`;
     })
     .join('');
 }
@@ -23,16 +27,16 @@ function createMarkupForCountry(arr) {
         <img width="50" src="${el.flags.png}" alt="${el.flags.alt}" />
         <span class="country-name">${el.name.common}</span>
       </div>
-      <p>Capital: ${el.capital}</p>
-      <p>Population: ${el.population}</p>
-      <p>Languages: ${Object.values(el.languages).join(', ')}</p>`;
+      <p class="text"> Capital: ${el.capital}</p>
+      <p class="text"> Population: ${el.population}</p>
+      <p class="text"> Languages: ${Object.values(el.languages).join(', ')}</p>`;
   });
 }
 function clear() {
-  listEl.innerHTML = '';
-  infoEl.innerHTML = '';
+  listElement.innerHTML = '';
+  infoElement.innerHTML = '';
 }
-inputEl.addEventListener(
+inputElement.addEventListener(
   'input',
   debounce(e => {
     const inputValue = e.target.value.trim();
@@ -45,21 +49,21 @@ inputEl.addEventListener(
         clear();
         if (data.length > 10) {
           Notiflix.Notify.info(
-            'Too many matches found. Please enter a more specific name.'
+            'Пожалуйста, введите более конкретное имя.'
           );
         }
         if (data.length >= 2 && data.length <= 10) {
-          const markupList = createMarkupForList(data);
-          listEl.innerHTML = markupList;
+          const List = createMarkupForList(data);
+          listElement.innerHTML = List;
         }
 
         if (data.length === 1) {
-          const markupInfo = createMarkupForCountry(data);
-          infoEl.innerHTML = markupInfo;
+          const Info = createMarkupForCountry(data);
+          infoElement.innerHTML = Info;
         }
       })
       .catch(err => {
-        Notiflix.Notify.failure('Oops, there is no country with that name');
+        Notiflix.Notify.failure('Ой, нет страны с таким названием');
         clear();
       });
   }, DEBOUNCE_DELAY)
